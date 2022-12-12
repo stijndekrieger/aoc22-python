@@ -1,0 +1,15 @@
+#A Enemy Rock
+#B Enemy Paper
+#C Enemy Scissors
+
+#X My Rock
+#Y My Paper
+#Z My Scissors
+
++1 Rock
++2 Paper
++3 Scissors
+
++0 Lose
++3 Draw
++6 Win
