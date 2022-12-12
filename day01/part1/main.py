@@ -12,4 +12,4 @@ for line in lines:
       highestValue = currentValue
     currentValue = 0
 
-print("The elf with the most calories has", str(highestValue), "calories.")
+print("The Elf with the most calories has", str(highestValue), "calories.")
