@@ -13,3 +13,7 @@
 +0 Lose
 +3 Draw
 +6 Win
+
+#X Lose
+#Y Draw
+#Z Win
