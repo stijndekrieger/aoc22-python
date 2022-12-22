@@ -5,6 +5,7 @@ def letter_to_number(letter: str):
 
 currentCoordinates = []
 endCoordinates = []
+visitedCoordinates = []
 
 with open("day12/data/heightmap.txt") as file:
   map = file.readlines()
@@ -30,11 +31,11 @@ with open("day12/data/heightmap.txt") as file:
       currentHorizontalPosition += 1
     currentVerticalLine += 1
 
-# with open("day12/data/heightmap-test.txt", "w") as file:
-#   for horizontalLine in heightmap:
-#     for number in horizontalLine:
-#       file.write(str(number) + " ")
-#     file.write("\n")
+with open("day12/data/heightmap-test.txt", "w") as file:
+  for horizontalLine in heightmap:
+    for number in horizontalLine:
+      file.write(str(number) + " ")
+    file.write("\n")
 
 def getPossibleMoves():
   possibleMoves = []
@@ -45,20 +46,20 @@ def getPossibleMoves():
   #vertical options
   #check below
   if currentCoordinates[0] < maxVertical:
-    if heightmap[currentCoordinates[0]+1][currentCoordinates[1]] <= currentHeight:
+    if heightmap[currentCoordinates[0]+1][currentCoordinates[1]] <= currentHeight +1:
       possibleMoves.append([currentCoordinates[0]+1,currentCoordinates[1]])
   #check above
   if currentCoordinates[0] > 0:
-    if heightmap[currentCoordinates[0]-1][currentCoordinates[1]] <= currentHeight:
+    if heightmap[currentCoordinates[0]-1][currentCoordinates[1]] <= currentHeight +1:
       possibleMoves.append([currentCoordinates[0]-1,currentCoordinates[1]])
   #horizontal options
   #check left
   if currentCoordinates[1] > 0:
-    if heightmap[currentCoordinates[0]][currentCoordinates[1]-1] <= currentHeight:
+    if heightmap[currentCoordinates[0]][currentCoordinates[1]-1] <= currentHeight +1:
       possibleMoves.append([currentCoordinates[0],currentCoordinates[1]-1])
   #check right
   if currentCoordinates[1] < maxHorizontal:
-    if heightmap[currentCoordinates[0]][currentCoordinates[1]+1] <= currentHeight:
+    if heightmap[currentCoordinates[0]][currentCoordinates[1]+1] <= currentHeight +1:
       possibleMoves.append([currentCoordinates[0],currentCoordinates[1]+1])
 
   return possibleMoves
@@ -67,8 +68,15 @@ def getBestMove(possibleMoves):
   if endCoordinates in possibleMoves:
     return endCoordinates
 
+  for move in possibleMoves:
+    if heightmap[move[0]][move[1]] > heightmap[currentCoordinates[0]][currentCoordinates[1]]:
+      return move
+
   allDeltas = []
   for move in possibleMoves:
+    # if move in visitedCoordinates:
+    #   allDeltas.append([5000,25])
+    #   continue
     deltaArray = []
     currentCoordinateIndex = 0
     for coordinate in move:
@@ -78,30 +86,32 @@ def getBestMove(possibleMoves):
 
     allDeltas.append(deltaArray)
 
-  print(" All delta array",allDeltas)
+  # print(" All delta array",allDeltas)
   bestDelta = min(allDeltas, key=lambda x: x[0] + x[1])
   indexOfBest = allDeltas.index(bestDelta)
   return possibleMoves[indexOfBest]
 
 stepsTaken = 0
+print("Current position",currentCoordinates)
 # while currentCoordinates != endCoordinates:
+#   visitedCoordinates.append(currentCoordinates)
+#   # print(" Visisted positions:", visitedCoordinates)
 #   possibleMoves = getPossibleMoves()
 #   bestMove = getBestMove(possibleMoves)
-#   print("Possible Moves",possibleMoves)
-#   print("Best Move",bestMove)
+#   # print(" Possible Moves",possibleMoves)
+#   # print(" Best Move",bestMove)
 #   currentCoordinates = bestMove
 #   stepsTaken += 1
-  # print(possibleMoves)
-  # print(currentCoordinates)
+#   print("Current position",currentCoordinates)
 
-print("Current position",currentCoordinates)
-for i in range(10):
+for i in range(80):
+  visitedCoordinates.append(currentCoordinates)
+  # print(" Visisted positions:", visitedCoordinates)
   possibleMoves = getPossibleMoves()
   bestMove = getBestMove(possibleMoves)
-  print(" Possible Moves",possibleMoves)
-  print(" Best Move",bestMove)
+  # print(" Possible Moves",possibleMoves)
+  # print(" Best Move",bestMove)
   currentCoordinates = bestMove
   stepsTaken += 1
   print("Current position",currentCoordinates)
-  # print(possibleMoves)
-  # print(currentCoordinates)
+print("Total steps taken:", stepsTaken)
